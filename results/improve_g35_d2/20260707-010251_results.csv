@@ -1,0 +1,9 @@
+run_id,source,season,ptype,variant,out_file,dino_sim,ssim,clip_season_prob,clip_directional,structure_score,season_score,disqualified,score,gen_time_sec,manual_score,manual_comment
+20260707-010251,levir_val_1.png,deep_winter,kontext_guide,0,levir_val_1__deep_winter__kontext_guide__v0.png,0.4746,0.1984,0.8533,0.3089,0.4194,0.7539,False,0.5532,18.169,,
+20260707-010251,levir_val_1.png,deep_winter,contextual,0,levir_val_1__deep_winter__contextual__v0.png,0.4486,0.1853,0.8956,0.3096,0.396,0.7752,False,0.5477,18.063,,
+20260707-010251,levir_val_7.png,deep_winter,kontext_guide,0,levir_val_7__deep_winter__kontext_guide__v0.png,0.608,0.2348,0.8933,0.2233,0.5334,0.7525,False,0.621,18.08,,
+20260707-010251,levir_val_7.png,deep_winter,contextual,0,levir_val_7__deep_winter__contextual__v0.png,0.6466,0.2426,0.8916,0.2601,0.5658,0.7608,False,0.6438,18.089,,
+20260707-010251,levir_val_19.png,deep_winter,kontext_guide,0,levir_val_19__deep_winter__kontext_guide__v0.png,0.68,0.0205,0.9219,0.2337,0.5481,0.7694,False,0.6366,18.095,,
+20260707-010251,levir_val_19.png,deep_winter,contextual,0,levir_val_19__deep_winter__contextual__v0.png,0.6424,0.016,0.9364,0.2317,0.5171,0.7761,False,0.6207,18.104,,
+20260707-010251,levir_val_49.png,deep_winter,kontext_guide,0,levir_val_49__deep_winter__kontext_guide__v0.png,0.5223,0.1802,0.7705,0.3064,0.4539,0.7118,False,0.5571,18.108,,
+20260707-010251,levir_val_49.png,deep_winter,contextual,0,levir_val_49__deep_winter__contextual__v0.png,0.6006,0.177,0.7905,0.2982,0.5159,0.7198,False,0.5975,18.111,,

@@ -1,0 +1,5 @@
+ptype,n,mean_score,mean_structure,mean_season,mean_dino,mean_ssim,mean_clip_prob,mean_clip_dir,n_disqualified,std_score
+kontext_guide,144,0.7533,0.7661,0.734,0.8368,0.4833,0.7725,0.2144,0,0.1177
+step_back,144,0.7354,0.7383,0.7311,0.8226,0.4007,0.774,0.2008,0,0.1198
+contextual,144,0.7315,0.7295,0.7344,0.8131,0.3952,0.7791,0.2029,0,0.1229
+decomposed,144,0.7248,0.714,0.7411,0.8035,0.3559,0.7926,0.196,0,0.1192

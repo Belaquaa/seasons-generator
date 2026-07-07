@@ -1,0 +1,36 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Локальные секреты / окружение
+.env
+
+# Модели и кеши — не хранить в репозитории (NFR бизнес-ТЗ §9)
+models/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+
+# Результаты генерации (регенерируемо)
+outputs/generated/*
+!outputs/generated/.gitkeep
+outputs/evaluation/*
+!outputs/evaluation/.gitkeep
+
+# Датасет (внешние данные кладутся сюда локально)
+data/input/*
+!data/input/.gitkeep
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Генерируемый бандл для Colab
+colab_bundle.zip
+
+# Тяжёлые архивы прогонов — вне git
+outputs/raw_archives/

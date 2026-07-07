@@ -1,0 +1,117 @@
+# 10 типов x 4 сезона. Тексты на английском — T5-энкодер FLUX его понимает лучше.
+# base-часть одинакова у всех типов, меняется только сезонный блок: иначе
+# сравнение типов нечестное. Формулировки по гайду BFL для Kontext:
+# change/replace вместо transform, явная фиксация placement/camera/framing.
+# Плейсхолдеры из src/prompts.py: {season_name} {season_signals} {preserve} {avoid} {scene}
+
+base:
+  scene: "high-resolution aerial/satellite top-down photo of an urban area"
+  preserve: >-
+    keep every road, building, parking lot and field boundary in the exact
+    same position and scale; maintain identical layout, camera angle,
+    framing and perspective
+  avoid: >-
+    new buildings, new roads, removed or moved structures, changed street
+    layout, different location, distortion, warping, added vehicles or
+    objects, blur, artifacts, text, watermark
+
+seasons:
+  summer:
+    season_name: "summer"
+    season_signals: "lush green vegetation, green trees and grass, dry bare ground, warm daylight, no snow"
+  autumn:
+    season_name: "autumn"
+    season_signals: "yellow and orange foliage, fading vegetation, golden and brown tones, some bare trees, no snow"
+  winter:
+    season_name: "winter"
+    # v4 (по эксперименту W2g35): лексика "first snowfall" + запрет заливки;
+    # для зимы guidance 3.5 даёт структуру +0.11 и сезон +0.06 против v3
+    season_signals: "very light first snowfall: thin white patches scattered between bare dark vegetation and soil, most of the ground and roads still snow-free and clearly visible, pale cold light; do not cover the entire ground with snow"
+  deep_winter:
+    season_name: "deep winter"
+    season_signals: "heavy thick snow covering the entire ground and rooftops, frozen surfaces, strong cold white palette, snow-laden bare trees"
+
+# has_negative: true -> генерация с negative_prompt (true_cfg у FLUX,
+# нативный negative у SDXL/IP2P)
+prompt_types:
+
+  zero_shot:
+    has_negative: false
+    template: "Make this a {season_name} scene."
+
+  contextual:
+    has_negative: false
+    template: >-
+      This is a {scene}. Change only the season to {season_name}
+      ({season_signals}). Preserve the structure of the territory:
+      {preserve}. Do not add, remove or move any structures.
+
+  positive:
+    has_negative: false
+    template: >-
+      Change the season of this {scene} to {season_name}: {season_signals}.
+      Realistic remote-sensing look with consistent natural lighting and
+      colors typical for {season_name}. {preserve}.
+
+  negative:
+    has_negative: true
+    template: >-
+      Change the season of this {scene} to {season_name}: {season_signals}.
+      Realistic remote-sensing look. {preserve}.
+    negative_template: "{avoid}"
+
+  few_shot:
+    has_negative: false
+    template: >-
+      Season-editing examples - "summer: green vegetation, dry ground, no
+      snow, same roads and buildings"; "autumn: golden foliage, same layout
+      and structures". Now apply the same kind of edit: "{season_name}:
+      {season_signals}; {preserve}".
+
+  cot:
+    has_negative: false
+    template: >-
+      Step 1: identify all roads, buildings, parking lots and field
+      boundaries and keep them exactly in place. Step 2: change the season
+      to {season_name} by adding {season_signals}. Step 3: do not add or
+      remove any structures and do not change the layout. Final result:
+      the same territory shown in {season_name}.
+
+  kontext_guide:
+    has_negative: false
+    template: >-
+      Change the season to {season_name}: {season_signals}. Only replace
+      the environmental conditions around the structures. Maintain
+      identical placement of every road, building, parking lot and field
+      boundary, and keep the same camera angle, framing and perspective.
+      Do not add or remove any objects.
+
+  step_back:
+    has_negative: false
+    template: >-
+      What distinguishes a {season_name} aerial photo from a summer one?
+      Only the seasonal state of surfaces and vegetation: {season_signals}.
+      The territory layout never changes with seasons. Now apply exactly
+      this seasonal change to this {scene}: {preserve}.
+
+  decomposed:
+    has_negative: false
+    template: >-
+      Task: seasonal edit of a {scene}. Season: {season_name}
+      ({season_signals}). Keep: {preserve}. Forbid: adding, removing or
+      moving any structures. Result check: the same territory from the
+      same viewpoint, only the seasonal appearance has changed.
+
+  hybrid:
+    # запреты внутри промпта, не через true_cfg-negative: у FLUX он
+    # статистически вредил структуре (p<0.001)
+    has_negative: false
+    template: >-
+      This is a {scene}. Change the season to {season_name}:
+      {season_signals}. Only replace the environmental conditions around
+      the structures; realistic remote-sensing look with natural
+      {season_name} lighting. Maintain identical placement of every road,
+      building, parking lot and field boundary, and keep the same camera
+      angle, framing and perspective. Do not add new buildings, roads or
+      vehicles, do not remove or move any structures, avoid distortion
+      of the layout.

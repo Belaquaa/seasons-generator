@@ -1,0 +1,13 @@
+run_id,source,season,ptype,variant,out_file,dino_sim,ssim,clip_season_prob,clip_directional,structure_score,season_score,disqualified,score,gen_time_sec
+20260707-104829,levir_val_1.png,autumn,positive,0,levir_val_1__autumn__positive__v0.png,0.8607,0.1392,0.9105,0.1725,0.7164,0.7484,False,0.7292,1.633
+20260707-104829,levir_val_1.png,winter,positive,0,levir_val_1__winter__positive__v0.png,0.8567,0.1466,0.0032,0.0141,0.7147,0.2551,False,0.5309,1.317
+20260707-104829,levir_val_1.png,deep_winter,positive,0,levir_val_1__deep_winter__positive__v0.png,0.7773,0.1276,0.1023,0.1353,0.6473,0.3349,False,0.5224,1.322
+20260707-104829,levir_val_7.png,autumn,positive,0,levir_val_7__autumn__positive__v0.png,0.7917,0.2541,0.8578,0.1158,0.6842,0.7079,False,0.6937,1.317
+20260707-104829,levir_val_7.png,winter,positive,0,levir_val_7__winter__positive__v0.png,0.7904,0.2327,0.2497,0.1596,0.6789,0.4148,False,0.5732,1.315
+20260707-104829,levir_val_7.png,deep_winter,positive,0,levir_val_7__deep_winter__positive__v0.png,0.7351,0.2309,0.585,0.2264,0.6342,0.5991,False,0.6202,1.314
+20260707-104829,levir_val_19.png,autumn,positive,0,levir_val_19__autumn__positive__v0.png,0.6886,0.0615,0.875,0.0911,0.5632,0.7103,False,0.622,1.314
+20260707-104829,levir_val_19.png,winter,positive,0,levir_val_19__winter__positive__v0.png,0.6923,0.0734,0.6013,0.1359,0.5685,0.5846,False,0.575,1.313
+20260707-104829,levir_val_19.png,deep_winter,positive,0,levir_val_19__deep_winter__positive__v0.png,0.5249,0.0692,0.6351,0.1725,0.4337,0.6107,False,0.5045,1.313
+20260707-104829,levir_val_49.png,autumn,positive,0,levir_val_49__autumn__positive__v0.png,0.8857,0.1344,0.9086,0.12,0.7354,0.7343,False,0.735,1.314
+20260707-104829,levir_val_49.png,winter,positive,0,levir_val_49__winter__positive__v0.png,0.8508,0.1367,0.1578,0.0798,0.708,0.3488,False,0.5643,1.315
+20260707-104829,levir_val_49.png,deep_winter,positive,0,levir_val_49__deep_winter__positive__v0.png,0.6375,0.1313,0.6783,0.2976,0.5363,0.6635,False,0.5872,1.313

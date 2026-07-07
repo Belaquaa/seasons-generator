@@ -1,0 +1,44 @@
+# Все параметры генерации фиксированы одинаковыми для всех промптов —
+# иначе сравнение типов промптов нечестное.
+
+generation:
+  backend: mock                 # mock | flux | flux2 | sdxl | ip2p  (mock = без GPU)
+  model_id: black-forest-labs/FLUX.1-Kontext-dev
+  dtype: bf16                   # bf16 полная точность | fp8 (24GB) | gguf-q4 (T4 16GB)
+  gguf_url: https://huggingface.co/QuantStack/FLUX.1-Kontext-dev-GGUF/blob/main/flux1-kontext-dev-Q4_K_S.gguf
+  resolution: 1024              # LEVIR-тайлы 1024x1024
+  num_inference_steps: 28
+  guidance_scale: 2.5           # рекомендованное для Kontext
+  true_cfg_scale: 3.0           # включает реальный negative_prompt; ТОЛЬКО тип negative
+  seed: 42
+  num_variants: 1               # N изображений на комбинацию: seed, seed+1, ...
+  cpu_offload: none             # none (весь пайплайн в VRAM) | model | sequential
+
+dataset:
+  input_dir: data/input
+  images: []                    # пусто = все файлы из input_dir; иначе список имён
+
+seasons: [summer, autumn, winter, deep_winter]
+prompt_types: [zero_shot, contextual, positive, negative, few_shot, cot,
+               step_back, decomposed, kontext_guide, hybrid]
+
+evaluation:
+  structure_model: timm/vit_small_plus_patch16_dinov3.lvd1689m  # DINOv3, не gated
+  season_model: openai/clip-vit-base-patch16
+  device: cpu                   # cpu | cuda
+  source_season: summer         # исходный сезон снимков, для CLIP directional
+  # Порог откалиброван по визуальной сверке FLUX-прогона 20260706-131826:
+  # сломанные сцены (другая местность/ракурс) имеют dino < 0.3,
+  # живые > 0.4; SSIM у генеративных редакторов систематически низок
+  # (перерисовка текстур), поэтому его вес в структуре понижен
+  structure_threshold: 0.30
+  structure_weights:
+    dino: 0.8
+    ssim: 0.2
+  weights:
+    structure: 0.6              # для change detection структура важнее сезона
+    season: 0.4
+
+output:
+  generated_dir: outputs/generated
+  evaluation_dir: outputs/evaluation

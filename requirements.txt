@@ -1,0 +1,37 @@
+# Пайплайн работает на CPU для всего, кроме FLUX-генерации (backend: flux).
+# Для mock-backend и оценки GPU не нужен.
+
+# --- генерация (нужен только для backend: flux) ---
+diffusers>=0.31
+transformers>=4.44
+accelerate>=0.34
+safetensors>=0.4
+huggingface_hub>=0.25
+optimum-quanto>=0.2        # fp8-квантизация под 16 ГБ VRAM
+
+# --- torch ставится отдельно под среду ---
+# ROCm (AMD):   pip install torch --index-url https://download.pytorch.org/whl/rocm6.2
+# CUDA (облако): pip install torch --index-url https://download.pytorch.org/whl/cu124
+# CPU (mock/оценка): pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch
+
+# --- оценка ---
+timm>=1.0                 # DINOv3 (структура)
+scikit-image>=0.24        # SSIM
+tabulate>=0.9             # DataFrame.to_markdown в compare_prompts
+scipy>=1.11               # тест Вилкоксона в compare_prompts
+
+# --- только для dtype: gguf-q4 (16GB GPU, T4) ---
+gguf>=0.10
+bitsandbytes>=0.44
+
+# --- изображения / данные ---
+pillow>=10.0
+numpy>=1.26
+pandas>=2.2
+pyyaml>=6.0
+
+# --- GDAL: НЕ ставить через этот файл ---
+# Debian/WSL:  sudo apt install gdal-bin libgdal-dev python3-gdal
+#              затем pip install "GDAL==$(gdal-config --version)"
+# либо conda:  conda install -c conda-forge gdal
