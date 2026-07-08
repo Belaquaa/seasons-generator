@@ -112,7 +112,7 @@
 
 | Исходное изображение | Лето | Зима |
 | --- | --- | --- |
-| ![Исходное изображение](report_assets/season_source.png) | ![Лето](report_assets/season_summer.png) | ![Зима](report_assets/season_winter.png) |
+| ![Исходное изображение](report_assets/season_summer.png) | ![Лето](report_assets/season_source.png) | ![Зима](report_assets/season_winter.png) |
 
 | Глубокая зима | Осень |
 | --- | --- |
