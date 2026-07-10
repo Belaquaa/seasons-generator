@@ -99,6 +99,48 @@ def test_factory() -> None:
     print("factory: OK")
 
 
+def test_fs_helpers() -> None:
+    rgb, _ = gdal_io.read_image(SAMPLE)
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        nested = root / "a" / "b"
+        gdal_io.makedirs(nested)
+        assert gdal_io.dir_exists(nested) and not gdal_io.file_exists(nested)
+
+        gdal_io.write_image(nested / "img.png", rgb)
+        assert gdal_io.file_exists(nested / "img.png")
+        assert not gdal_io.dir_exists(nested / "img.png")
+        assert "img.png" in gdal_io.list_dir(nested)
+
+        gdal_io.write_text(root / "note.txt", "привет")
+        assert gdal_io.file_exists(root / "note.txt")
+        assert (root / "note.txt").read_text("utf-8") == "привет"
+
+        gdal_io.copy_file(root / "note.txt", root / "c" / "copy.txt")
+        assert (root / "c" / "copy.txt").read_text("utf-8") == "привет"
+    print("fs_helpers: list_dir/exists/makedirs/copy/write_text OK")
+
+
+def test_dataset() -> None:
+    from dataset import Dataset
+
+    rgb, _ = gdal_io.read_image(SAMPLE)
+    with tempfile.TemporaryDirectory() as td:
+        in_dir = Path(td) / "in"
+        for name in ("levir_2.png", "levir_1.png"):
+            gdal_io.write_image(in_dir / name, rgb)
+        (in_dir / "readme.txt").write_text("not an image", encoding="utf-8")
+
+        ds = Dataset(in_dir)
+        assert len(ds) == 2, f"ожидалось 2 изображения, найдено {len(ds)}"
+        stems = [item.stem for item in ds]
+        assert stems == ["levir_1", "levir_2"], f"нет сортировки: {stems}"
+        first = ds[0]
+        assert first.image.ndim == 3 and first.image.shape[2] == 3
+        assert first.name == "levir_1.png"
+    print("dataset: len, сортировка, итерация, __getitem__ OK")
+
+
 def test_geotiff() -> None:
     if not gdal_io.HAS_GDAL:
         print("geotiff: SKIPPED (GDAL не установлен, работает Pillow-фолбэк)")
@@ -153,5 +195,7 @@ if __name__ == "__main__":
     test_io_errors()
     test_mock_generator()
     test_factory()
+    test_fs_helpers()
+    test_dataset()
     test_geotiff()
     print("\nALL SMOKE TESTS PASSED")

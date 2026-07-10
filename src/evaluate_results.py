@@ -19,11 +19,11 @@ def find_run_dir(config: dict, run_arg: str | None) -> Path:
         run_dir = Path(run_arg)
         if not run_dir.is_absolute():
             run_dir = ROOT / run_arg
-        if not run_dir.is_dir():
+        if not gdal_io.dir_exists(run_dir):
             raise FileNotFoundError(f"Нет папки прогона: {run_dir}")
         return run_dir
-    runs = sorted(d for d in base.iterdir()
-                  if d.is_dir() and (d / "metadata.jsonl").is_file())
+    runs = sorted(base / name for name in gdal_io.list_dir(base)
+                  if gdal_io.file_exists(base / name / "metadata.jsonl"))
     if not runs:
         raise FileNotFoundError(f"В {base} нет прогонов с metadata.jsonl")
     return runs[-1]
@@ -52,7 +52,7 @@ def main() -> None:
     run_cfg = load_config(run_dir / "run_config.yaml")
 
     out_dir = ROOT / config["output"]["evaluation_dir"]
-    out_dir.mkdir(parents=True, exist_ok=True)
+    gdal_io.makedirs(out_dir)
     out_csv = out_dir / f"{run_dir.name}_results.csv"
 
     records = load_records(run_dir)

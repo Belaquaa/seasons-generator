@@ -7,6 +7,7 @@ from pathlib import Path
 import pandas as pd
 from scipy.stats import wilcoxon
 
+import gdal_io
 from prompts import ROOT, build_prompt_matrix, load_config, load_prompts
 
 
@@ -16,10 +17,11 @@ def find_results_csv(config: dict, arg: str | None) -> Path:
         p = Path(arg)
         if not p.is_absolute():
             p = ROOT / arg
-        if not p.is_file():
+        if not gdal_io.file_exists(p):
             raise FileNotFoundError(f"Нет файла результатов: {p}")
         return p
-    files = sorted(base.glob("*_results.csv"))
+    files = sorted(base / n for n in gdal_io.list_dir(base)
+                   if n.endswith("_results.csv"))
     if not files:
         raise FileNotFoundError(f"В {base} нет *_results.csv — сначала "
                                 "запустите evaluate_results.py")

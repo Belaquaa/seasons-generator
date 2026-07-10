@@ -5,7 +5,6 @@ import argparse
 import itertools
 import json
 import re
-import shutil
 import time
 from datetime import datetime
 from pathlib import Path
@@ -21,11 +20,9 @@ def make_run_dir(base: Path) -> Path:
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     for suffix in [""] + [f"-{i}" for i in range(1, 100)]:
         run_dir = base / f"{run_id}{suffix}"
-        try:
-            run_dir.mkdir(parents=True, exist_ok=False)
+        if not gdal_io.dir_exists(run_dir):
+            gdal_io.makedirs(run_dir)
             return run_dir
-        except FileExistsError:
-            continue
     raise RuntimeError(f"Не удалось создать уникальную папку прогона в {base}")
 
 
@@ -72,8 +69,8 @@ def main() -> None:
         generator.prepare_prompts(texts)
     run_dir = make_run_dir(ROOT / config["output"]["generated_dir"])
 
-    shutil.copy2(args.config, run_dir / "run_config.yaml")
-    shutil.copy2(ROOT / "prompts" / "prompts.yaml", run_dir / "prompts.yaml")
+    gdal_io.copy_file(args.config, run_dir / "run_config.yaml")
+    gdal_io.copy_file(ROOT / "prompts" / "prompts.yaml", run_dir / "prompts.yaml")
 
     variants = int(gcfg.get("num_variants", 1))
     total = len(sources) * len(matrix) * variants

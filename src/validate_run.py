@@ -39,12 +39,12 @@ def validate_completeness(config: dict, records: list[dict],
           f"{len(config['prompt_types'])} типов x {len(variants)} вариантов)")
 
     missing = [r["out_file"] for r in records
-               if not (run_dir / r["out_file"]).is_file()]
+               if not gdal_io.file_exists(run_dir / r["out_file"])]
     check("файлы: все из метаданных существуют", not missing,
           f"отсутствуют: {missing[:3]}" if missing else "")
 
-    extra = {p.name for p in run_dir.glob("*.png")} - \
-            {r["out_file"] for r in records}
+    pngs = {n for n in gdal_io.list_dir(run_dir) if n.lower().endswith(".png")}
+    extra = pngs - {r["out_file"] for r in records}
     check("файлы: нет лишних png", not extra,
           f"лишние: {sorted(extra)[:3]}" if extra else "")
 
@@ -53,7 +53,7 @@ def validate_images(records: list[dict], run_dir: Path) -> None:
     bad_read, bad_flat, bad_size = [], [], []
     for r in records:
         path = run_dir / r["out_file"]
-        if not path.is_file():
+        if not gdal_io.file_exists(path):
             continue
         try:
             rgb, _ = gdal_io.read_image(path)
@@ -78,7 +78,7 @@ def validate_metrics_csv(config: dict, run_dir: Path,
 
     csv = (ROOT / config["output"]["evaluation_dir"]
            / f"{run_dir.name}_results.csv")
-    if not csv.is_file():
+    if not gdal_io.file_exists(csv):
         check("оценка: CSV существует", False,
               f"{csv.name} не найден — запустите evaluate_results.py")
         return
@@ -102,7 +102,9 @@ def validate_anchors(config: dict) -> None:
     from metrics import Metrics
 
     input_dir = ROOT / config["dataset"]["input_dir"]
-    sources = sorted(input_dir.glob("*.png"))[:3]
+    sources = [input_dir / n for n in
+               sorted(n for n in gdal_io.list_dir(input_dir)
+                      if n.lower().endswith(".png"))][:3]
     if not sources:
         check("якоря: есть исходники", False)
         return

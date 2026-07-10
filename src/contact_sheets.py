@@ -37,7 +37,7 @@ def main() -> None:
     input_dir = ROOT / run_cfg["dataset"]["input_dir"]
     out_dir = (ROOT / config["output"]["evaluation_dir"]
                / f"{run_dir.name}_sheets")
-    out_dir.mkdir(parents=True, exist_ok=True)
+    gdal_io.makedirs(out_dir)
     size = args.thumb
 
     by_key: dict[tuple[str, str, int], dict[str, str]] = {}

@@ -21,6 +21,10 @@ outputs/generated/*
 outputs/evaluation/*
 !outputs/evaluation/.gitkeep
 
+# Собранный обучающий набор конвейером build_dataset (регенерируемо)
+outputs/dataset/
+outputs/dataset_example/
+
 # Датасет (внешние данные кладутся сюда локально)
 data/input/*
 !data/input/.gitkeep
@@ -28,6 +32,9 @@ data/input/*
 # OS
 Thumbs.db
 .DS_Store
+
+# Кеши инструментов
+.serena/
 
 # Генерируемый бандл для Colab
 colab_bundle.zip

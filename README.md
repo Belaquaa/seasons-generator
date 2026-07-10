@@ -25,11 +25,14 @@ data/input/          исходники (before-снимки LEVIR-CD val)
 prompts/prompts.yaml промпты: 10 типов x 4 сезона (версия v4)
 config.yaml          параметры прогона и оценки
 src/                 код (prompts, gdal_io, model_flux, generate, metrics,
-                     evaluate, validate, contact_sheets, compare)
-outputs/generated/   результаты + metadata.jsonl (снапшот конфига в папке прогона)
+                     evaluate, validate, contact_sheets, compare,
+                     dataset, build_dataset)
+outputs/generated/   результаты исследования + metadata.jsonl (снапшот конфига)
 outputs/evaluation/  таблицы метрик, сводки, контактные листы
+outputs/dataset/     собранный обучающий набор (build_dataset)
 results/             сохранённые итоги всех прогонов + INDEX.md
-scripts/             download_levir.py, make_colab_bundle.py, make_colab_notebook.py
+scripts/             download_levir.py, make_colab_bundle.py, make_colab_notebook.py,
+                     example_build_dataset.sh
 ```
 
 ## Установка
@@ -39,6 +42,8 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 # torch — под свою среду (см. комментарии в requirements.txt)
 # GDAL — системно: sudo apt install gdal-bin libgdal-dev python3-gdal
+# apt-сборка GDAL <= 3.8 совместима только с numpy 1.x: при ошибке
+# "numpy.core.multiarray failed to import" — pip install "numpy<2"
 ```
 
 Для `backend: flux` дополнительно нужен HF-логин и принятая лицензия FLUX.1 [dev].
@@ -63,6 +68,40 @@ pip install -r requirements.txt
    данные скачиваются с HF; нужна принятая лицензия FLUX.1 [dev]);
    скачанные пакеты результатов складываются в `results/`
 8. Перенести результаты в отчёт (пункты 7-9)
+
+## Сборка обучающего набора
+
+Исследование (пункты выше) выбирает лучший промпт. Прикладной итог — конвейер
+`src/build_dataset.py`, который этим промптом собирает набор для обучения:
+
+- `src/dataset.py` — простой класс `Dataset`: все изображения из указанной
+  директории, ленивое чтение, итерация по элементам с полем `image`. Контракт
+  минимален специально — класс можно заменить реальным датасетом проекта и
+  запустить тот же конвейер.
+- `src/build_dataset.py` — по каждому исходнику генерирует по несколько вариантов
+  каждого сезона, оставляет только корректные (сцена сохранена и сезон выражен по
+  тем же метрикам, что и в исследовании) и раскладывает результат:
+
+```
+outputs/dataset/<исходник>/params.json          параметры выборки
+outputs/dataset/<исходник>/<сезон>/*.png         корректные варианты сезона
+```
+
+Пример запуска (без GPU, backend из config.yaml):
+
+```bash
+bash scripts/example_build_dataset.sh      # Linux / Colab / Git Bash
+```
+
+Полный запуск с параметрами:
+
+```bash
+python src/build_dataset.py --per-season 5 --ptype kontext_guide \
+       --output-dir outputs/dataset
+```
+
+Отбор корректных генераций всегда использует модели метрик (DINOv3 + CLIP);
+для реальной генерации в `config.yaml` нужен `generation.backend: flux`.
 
 ## Запуск на GPU-сервере (A100 и подобные)
 
