@@ -1,0 +1,272 @@
+{
+  "source_image": "levir_val_1.png",
+  "prompt_type": "kontext_guide",
+  "seasons": [
+    "summer",
+    "autumn",
+    "winter",
+    "deep_winter"
+  ],
+  "per_season_requested": 2,
+  "generation": {
+    "backend": "flux",
+    "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+    "dtype": "bf16",
+    "resolution": 1024,
+    "num_inference_steps": 28,
+    "guidance_scale": 2.5,
+    "base_seed": 42
+  },
+  "acceptance": {
+    "structure_threshold": 0.3,
+    "clip_season_prob_threshold": 0.5,
+    "structure_weights": {
+      "dino": 0.8,
+      "ssim": 0.2
+    },
+    "score_weights": {
+      "structure": 0.6,
+      "season": 0.4
+    }
+  },
+  "prompts": {
+    "summer": {
+      "prompt": "Change the season to summer: lush green vegetation, green trees and grass, dry bare ground, warm daylight, no snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+      "negative_prompt": null
+    },
+    "autumn": {
+      "prompt": "Change the season to autumn: yellow and orange foliage, fading vegetation, golden and brown tones, some bare trees, no snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+      "negative_prompt": null
+    },
+    "winter": {
+      "prompt": "Change the season to winter: very light first snowfall: thin white patches scattered between bare dark vegetation and soil, most of the ground and roads still snow-free and clearly visible, pale cold light; do not cover the entire ground with snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+      "negative_prompt": null
+    },
+    "deep_winter": {
+      "prompt": "Change the season to deep winter: heavy thick snow covering the entire ground and rooftops, frozen surfaces, strong cold white palette, snow-laden bare trees. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+      "negative_prompt": null
+    }
+  },
+  "per_season_stats": {
+    "summer": {
+      "requested": 2,
+      "accepted": 2,
+      "attempts": 2,
+      "failed": 0
+    },
+    "autumn": {
+      "requested": 2,
+      "accepted": 2,
+      "attempts": 2,
+      "failed": 0
+    },
+    "winter": {
+      "requested": 2,
+      "accepted": 2,
+      "attempts": 4,
+      "failed": 0
+    },
+    "deep_winter": {
+      "requested": 2,
+      "accepted": 2,
+      "attempts": 2,
+      "failed": 0
+    }
+  },
+  "n_accepted": 8,
+  "accepted": [
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "summer/levir_val_1__summer__v0.png",
+      "season": "summer",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to summer: lush green vegetation, green trees and grass, dry bare ground, warm daylight, no snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 42
+      },
+      "metrics": {
+        "clip_season_prob": 0.9972,
+        "structure_score": 0.8215,
+        "season_score": 0.9972,
+        "score": 0.8917
+      }
+    },
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "summer/levir_val_1__summer__v1.png",
+      "season": "summer",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to summer: lush green vegetation, green trees and grass, dry bare ground, warm daylight, no snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 43
+      },
+      "metrics": {
+        "clip_season_prob": 0.9958,
+        "structure_score": 0.7993,
+        "season_score": 0.9958,
+        "score": 0.8779
+      }
+    },
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "autumn/levir_val_1__autumn__v0.png",
+      "season": "autumn",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to autumn: yellow and orange foliage, fading vegetation, golden and brown tones, some bare trees, no snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 42
+      },
+      "metrics": {
+        "clip_season_prob": 0.9716,
+        "structure_score": 0.683,
+        "season_score": 0.7767,
+        "score": 0.7205
+      }
+    },
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "autumn/levir_val_1__autumn__v1.png",
+      "season": "autumn",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to autumn: yellow and orange foliage, fading vegetation, golden and brown tones, some bare trees, no snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 43
+      },
+      "metrics": {
+        "clip_season_prob": 0.9775,
+        "structure_score": 0.7007,
+        "season_score": 0.7788,
+        "score": 0.732
+      }
+    },
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "winter/levir_val_1__winter__v0.png",
+      "season": "winter",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to winter: very light first snowfall: thin white patches scattered between bare dark vegetation and soil, most of the ground and roads still snow-free and clearly visible, pale cold light; do not cover the entire ground with snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 42
+      },
+      "metrics": {
+        "clip_season_prob": 0.6389,
+        "structure_score": 0.7351,
+        "season_score": 0.6206,
+        "score": 0.6893
+      }
+    },
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "winter/levir_val_1__winter__v1.png",
+      "season": "winter",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to winter: very light first snowfall: thin white patches scattered between bare dark vegetation and soil, most of the ground and roads still snow-free and clearly visible, pale cold light; do not cover the entire ground with snow. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 45
+      },
+      "metrics": {
+        "clip_season_prob": 0.6553,
+        "structure_score": 0.8156,
+        "season_score": 0.6332,
+        "score": 0.7427
+      }
+    },
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "deep_winter/levir_val_1__deep_winter__v0.png",
+      "season": "deep_winter",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to deep winter: heavy thick snow covering the entire ground and rooftops, frozen surfaces, strong cold white palette, snow-laden bare trees. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 42
+      },
+      "metrics": {
+        "clip_season_prob": 0.8394,
+        "structure_score": 0.4357,
+        "season_score": 0.747,
+        "score": 0.5602
+      }
+    },
+    {
+      "source_image": "levir_val_1.png",
+      "generated_file": "deep_winter/levir_val_1__deep_winter__v1.png",
+      "season": "deep_winter",
+      "model": {
+        "backend": "flux",
+        "model_id": "black-forest-labs/FLUX.1-Kontext-dev",
+        "dtype": "bf16"
+      },
+      "prompt": {
+        "type": "kontext_guide",
+        "text": "Change the season to deep winter: heavy thick snow covering the entire ground and rooftops, frozen surfaces, strong cold white palette, snow-laden bare trees. Only replace the environmental conditions around the structures. Maintain identical placement of every road, building, parking lot and field boundary, and keep the same camera angle, framing and perspective. Do not add or remove any objects.",
+        "negative": null,
+        "guidance_scale": 2.5,
+        "num_inference_steps": 28,
+        "seed": 43
+      },
+      "metrics": {
+        "clip_season_prob": 0.8729,
+        "structure_score": 0.4675,
+        "season_score": 0.7602,
+        "score": 0.5846
+      }
+    }
+  ],
+  "created": "2026-07-10T12:01:37"
+}

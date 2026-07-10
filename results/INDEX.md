@@ -21,6 +21,7 @@ seed 42, 1024x1024, 28 шагов, guidance 2.5 (если не указано и
 | `d2_confirm/` | 20260707-075751/080432 | Подтверждение D2 deep_winter на 10 снимках: база vs D2 (40) |
 | `sdxl_strength_sweep/` | 20260707-1047xx | SDXL strength 0.45/0.60/0.75, 4 снимка x 3 сезона (108) |
 | `sdxl_strength060/` | 20260707-110602 | SDXL strength 0.60, полная матрица 10x8x4 (320) |
+| `params_flux_example.json` | 20260710-120137 | Реальный params.json конвейера build_dataset: FLUX bf16, 1 исходник, 8/8 принято (Colab, G4) |
 
 ## Ключевые итоги
 
