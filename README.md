@@ -103,6 +103,50 @@ python src/build_dataset.py --per-season 5 --ptype kontext_guide \
 Отбор корректных генераций всегда использует модели метрик (DINOv3 + CLIP);
 для реальной генерации в `config.yaml` нужен `generation.backend: flux`.
 
+## Быстрое воспроизведение на GPU (Colab, одна ячейка)
+
+Проверенный рецепт (Colab Pro+, GPU G4/A100, прогон 10.07.2026 — итог в
+`results/params_flux_example.json`). Нужен секрет `HF_TOKEN` в Colab Secrets
+с принятой лицензией FLUX.1 [dev]:
+
+```python
+%cd /content
+!rm -rf proj
+!git clone -q https://github.com/Belaquaa/seasons-generator.git proj
+%cd proj
+!pip install -q -U diffusers transformers accelerate safetensors sentencepiece timm scikit-image
+
+from google.colab import userdata
+from huggingface_hub import login, hf_hub_download
+login(token=userdata.get('HF_TOKEN'))
+
+import yaml, zipfile, pathlib
+cfg = yaml.safe_load(open('config.yaml', encoding='utf-8'))
+cfg['generation'].update(backend='flux', dtype='bf16', cpu_offload='none')
+cfg['evaluation']['device'] = 'cuda'
+yaml.safe_dump(cfg, open('config.yaml', 'w', encoding='utf-8'),
+               allow_unicode=True, sort_keys=False)
+
+zp = hf_hub_download('satellite-image-deep-learning/LEVIR-CD', 'val.zip',
+                     repo_type='dataset')
+pathlib.Path('data/input').mkdir(parents=True, exist_ok=True)
+with zipfile.ZipFile(zp) as z:
+    a = sorted([n for n in z.namelist()
+                if n.startswith('A/') and n.endswith('.png')],
+               key=lambda n: int(''.join(c for c in n if c.isdigit())))
+    for name in a[::max(1, len(a) // 10)][:2]:
+        pathlib.Path('data/input', 'levir_' + pathlib.Path(name).name).write_bytes(z.read(name))
+
+!python src/build_dataset.py --limit 1 --per-season 2 --output-dir outputs/dataset
+
+p = sorted(pathlib.Path('outputs/dataset').glob('*/params.json'))[0]
+print(p.read_text(encoding='utf-8'))
+```
+
+Время: ~10 мин с нуля (скачивание модели ~34 GB) или ~3 мин на прогретом
+рантайме. Без GPU то же самое проверяется mock-backend'ом:
+`python tests/smoke_test.py`, затем `bash scripts/example_build_dataset.sh`.
+
 ## Запуск на GPU-сервере (A100 и подобные)
 
 Проверенная конфигурация (реальный прогон: 320 генераций bf16 + GPU-оценка):

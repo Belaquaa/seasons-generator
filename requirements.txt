@@ -6,6 +6,7 @@ diffusers>=0.31
 transformers>=4.44
 accelerate>=0.34
 safetensors>=0.4
+sentencepiece>=0.2         # T5-токенизатор FLUX
 huggingface_hub>=0.25
 optimum-quanto>=0.2        # fp8-квантизация под 16 ГБ VRAM
 
