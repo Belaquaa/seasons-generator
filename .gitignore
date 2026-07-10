@@ -24,6 +24,8 @@ outputs/evaluation/*
 # Собранный обучающий набор конвейером build_dataset (регенерируемо)
 outputs/dataset/
 outputs/dataset_example/
+outputs/cli_demo/
+outputs/offline_test/
 
 # Датасет (внешние данные кладутся сюда локально)
 data/input/*
