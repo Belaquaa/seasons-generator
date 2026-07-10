@@ -147,6 +147,40 @@ print(p.read_text(encoding='utf-8'))
 рантайме. Без GPU то же самое проверяется mock-backend'ом:
 `python tests/smoke_test.py`, затем `bash scripts/example_build_dataset.sh`.
 
+## Полностью офлайн (сервер без интернета, свои модели)
+
+Из сети конвейер берёт только три модели (имена — в `config.yaml`), всё
+остальное локально. Код не меняется: модели один раз скачиваются в HF-кеш
+на машине с интернетом, кеш переносится на сервер, оффлайн-режим включается
+переменными окружения (проверено: с `HF_HUB_OFFLINE=1` конвейер работает
+без единого обращения в сеть).
+
+На машине с интернетом:
+
+```bash
+export HF_HOME=/models/hf-cache
+huggingface-cli download black-forest-labs/FLUX.1-Kontext-dev   # ~34 GB, нужна принятая лицензия
+huggingface-cli download timm/vit_small_plus_patch16_dinov3.lvd1689m
+huggingface-cli download openai/clip-vit-base-patch16
+# перенести /models/hf-cache на сервер (диск/rsync)
+```
+
+На сервере (без интернета):
+
+```bash
+export HF_HOME=/models/hf-cache
+export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+# свои снимки — в data/input/ (или любой каталог через --input-dir)
+python src/build_dataset.py --input-dir /data/my_images --per-season 5 \
+       --output-dir outputs/dataset
+```
+
+Если модели на сервере лежат не HF-кешем, а обычными папками-снапшотами,
+для FLUX и CLIP можно указать пути прямо в `config.yaml`
+(`generation.model_id: /models/flux-kontext`,
+`evaluation.season_model: /models/clip-vit-b16`); модель структуры (timm)
+загружается только через HF-кеш — для нее используйте вариант с `HF_HOME`.
+
 ## Запуск на GPU-сервере (A100 и подобные)
 
 Проверенная конфигурация (реальный прогон: 320 генераций bf16 + GPU-оценка):
