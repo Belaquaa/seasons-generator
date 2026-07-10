@@ -68,6 +68,10 @@ def makedirs(path: str | Path) -> None:
     как pathlib), а не молча пропустит создание."""
     p = os.fspath(path)
     if HAS_GDAL:
+        # MkdirRecursive падает на относительном пути с несуществующим корнем;
+        # локальные пути абсолютизируем, /vsi-пути не трогаем
+        if not p.startswith("/vsi"):
+            p = os.path.abspath(p)
         if not dir_exists(p):
             gdal.MkdirRecursive(p, 0o755)
     else:

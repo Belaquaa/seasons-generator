@@ -1,6 +1,7 @@
 """Смоук-тесты конвейера (без GPU, без pytest — чистые asserts)."""
 from __future__ import annotations
 
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -118,7 +119,17 @@ def test_fs_helpers() -> None:
 
         gdal_io.copy_file(root / "note.txt", root / "c" / "copy.txt")
         assert (root / "c" / "copy.txt").read_text("utf-8") == "привет"
-    print("fs_helpers: list_dir/exists/makedirs/copy/write_text OK")
+
+        # относительный путь с несуществующим корнем (MkdirRecursive ломается
+        # на таких без абсолютизации — воспроизведено на Colab)
+        cwd = os.getcwd()
+        try:
+            os.chdir(root)
+            gdal_io.makedirs("rel_a/rel_b")
+            assert gdal_io.dir_exists(root / "rel_a" / "rel_b")
+        finally:
+            os.chdir(cwd)
+    print("fs_helpers: list_dir/exists/makedirs(отн. путь)/copy/write_text OK")
 
 
 def test_dataset() -> None:
